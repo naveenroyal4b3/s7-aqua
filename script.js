@@ -318,100 +318,72 @@ window.addEventListener('load', () => {
     }, 1000);
 });
 
-// FAQ Accordion Functionality
-function initFAQ() {
-    const faqItems = document.querySelectorAll('.faq-item');
+// FAQ Accordion Functionality - Simple and reliable
+(function() {
+    let faqInitialized = false;
     
-    console.log(`Found ${faqItems.length} FAQ items`);
-    
-    if (faqItems.length === 0) {
-        console.log('No FAQ items found');
-        return;
+    function initFAQ() {
+        if (faqInitialized) return;
+        
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        if (faqItems.length === 0) return;
+        
+        faqInitialized = true;
+        
+        faqItems.forEach((item) => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            
+            if (!question || !answer) return;
+            
+            // Ensure FAQ answer is initially hidden
+            item.classList.remove('active');
+            answer.style.maxHeight = '0';
+            answer.style.padding = '0 1.5rem';
+            answer.style.opacity = '0';
+            answer.style.display = 'block';
+            
+            // Add click handler - use onclick for reliability
+            question.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isActive = item.classList.contains('active');
+                
+                // Close all FAQ items
+                faqItems.forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                    const faqAnswer = faqItem.querySelector('.faq-answer');
+                    if (faqAnswer) {
+                        faqAnswer.style.maxHeight = '0';
+                        faqAnswer.style.padding = '0 1.5rem';
+                        faqAnswer.style.opacity = '0';
+                    }
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                    const scrollHeight = answer.scrollHeight;
+                    answer.style.maxHeight = scrollHeight + 'px';
+                    answer.style.padding = '0 1.5rem 1.5rem';
+                    answer.style.opacity = '1';
+                }
+            };
+        });
     }
     
-    faqItems.forEach((item, index) => {
-        const question = item.querySelector('.faq-question');
-        const answer = item.querySelector('.faq-answer');
-        
-        if (!question) {
-            console.log(`FAQ item ${index}: No question found`);
-            return;
-        }
-        
-        if (!answer) {
-            console.log(`FAQ item ${index}: No answer found`);
-            return;
-        }
-        
-        // Ensure FAQ answer is initially hidden
-        item.classList.remove('active');
-        answer.style.maxHeight = '0';
-        answer.style.padding = '0 1.5rem';
-        answer.style.opacity = '0';
-        answer.style.display = 'block';
-        
-        // Remove any existing event listeners by cloning
-        const newQuestion = question.cloneNode(true);
-        question.parentNode.replaceChild(newQuestion, question);
-        
-        // Add click handler to the entire question area
-        newQuestion.style.cursor = 'pointer';
-        newQuestion.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            console.log(`FAQ item ${index} clicked`);
-            
-            const isActive = item.classList.contains('active');
-            
-            // Close all FAQ items
-            faqItems.forEach(faqItem => {
-                faqItem.classList.remove('active');
-                const faqAnswer = faqItem.querySelector('.faq-answer');
-                if (faqAnswer) {
-                    faqAnswer.style.maxHeight = '0';
-                    faqAnswer.style.padding = '0 1.5rem';
-                    faqAnswer.style.opacity = '0';
-                }
-            });
-            
-            // Open clicked item if it wasn't active
-            if (!isActive) {
-                console.log(`Opening FAQ item ${index}`);
-                item.classList.add('active');
-                const scrollHeight = answer.scrollHeight;
-                answer.style.maxHeight = scrollHeight + 'px';
-                answer.style.padding = '0 1.5rem 1.5rem';
-                answer.style.opacity = '1';
-            } else {
-                console.log(`Closing FAQ item ${index}`);
-            }
-        });
-        
-        console.log(`FAQ item ${index} initialized`);
-    });
-    
-    console.log('FAQ initialization complete');
-}
-
-// Initialize FAQ multiple times to ensure it works
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded - Initializing FAQ');
-    initFAQ();
-});
-
-window.addEventListener('load', () => {
-    console.log('Window load - Initializing FAQ');
-    setTimeout(() => {
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFAQ);
+    } else {
         initFAQ();
-    }, 200);
-});
-
-// Also try after a delay
-setTimeout(() => {
-    console.log('Delayed initialization - Initializing FAQ');
-    initFAQ();
-}, 1000);
+    }
+    
+    // Also try on window load
+    window.addEventListener('load', initFAQ);
+})();
 
 // Enhanced Form Validation
 document.addEventListener('DOMContentLoaded', () => {
