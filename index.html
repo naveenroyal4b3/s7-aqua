@@ -473,10 +473,23 @@
                 const timer = setInterval(function() {
                     count += step;
                     if (count >= target) {
-                        el.textContent = target === 24 ? '24/7' : target + '+';
+                        if (target === 24) {
+                            el.textContent = '24/7';
+                        } else if (target >= 1000) {
+                            el.textContent = (target / 1000).toFixed(0) + 'k+';
+                        } else {
+                            el.textContent = target + '+';
+                        }
                         clearInterval(timer);
                     } else {
-                        el.textContent = target === 24 ? Math.floor(count) + '/7' : Math.floor(count) + '+';
+                        if (target === 24) {
+                            el.textContent = Math.floor(count) + '/7';
+                        } else if (target >= 1000) {
+                            const kValue = Math.floor(count / 1000);
+                            el.textContent = kValue > 0 ? kValue + 'k+' : Math.floor(count) + '+';
+                        } else {
+                            el.textContent = Math.floor(count) + '+';
+                        }
                     }
                 }, 40);
             }
