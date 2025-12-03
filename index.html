@@ -463,6 +463,98 @@
     </a>
 
     <script src="script.js"></script>
+    <!-- Inline scripts for Statistics and FAQ to ensure they work -->
+    <script>
+        // Statistics Counter - Inline version
+        (function() {
+            function animateCounter(el, target) {
+                let count = 0;
+                const step = target / 50;
+                const timer = setInterval(function() {
+                    count += step;
+                    if (count >= target) {
+                        el.textContent = target === 24 ? '24/7' : target + '+';
+                        clearInterval(timer);
+                    } else {
+                        el.textContent = target === 24 ? Math.floor(count) + '/7' : Math.floor(count) + '+';
+                    }
+                }, 40);
+            }
+            
+            function startStats() {
+                const stats = document.querySelectorAll('.stat-number');
+                stats.forEach(function(stat) {
+                    const target = parseInt(stat.getAttribute('data-target'));
+                    if (target && stat.textContent.trim() === '0') {
+                        animateCounter(stat, target);
+                    }
+                });
+            }
+            
+            // Try multiple times
+            setTimeout(startStats, 1000);
+            setTimeout(startStats, 2000);
+            setTimeout(startStats, 3000);
+            window.addEventListener('load', function() {
+                setTimeout(startStats, 500);
+            });
+        })();
+        
+        // FAQ Accordion - Inline version
+        (function() {
+            function initFAQ() {
+                const items = document.querySelectorAll('.faq-item');
+                items.forEach(function(item) {
+                    const q = item.querySelector('.faq-question');
+                    const a = item.querySelector('.faq-answer');
+                    if (!q || !a) return;
+                    
+                    // Hide answer
+                    a.style.maxHeight = '0';
+                    a.style.padding = '0 1.5rem';
+                    a.style.opacity = '0';
+                    a.style.display = 'block';
+                    
+                    // Add click
+                    q.onclick = function(e) {
+                        e.preventDefault();
+                        const active = item.classList.contains('active');
+                        
+                        // Close all
+                        items.forEach(function(i) {
+                            i.classList.remove('active');
+                            const ans = i.querySelector('.faq-answer');
+                            if (ans) {
+                                ans.style.maxHeight = '0';
+                                ans.style.padding = '0 1.5rem';
+                                ans.style.opacity = '0';
+                            }
+                        });
+                        
+                        // Open if was closed
+                        if (!active) {
+                            item.classList.add('active');
+                            a.style.maxHeight = a.scrollHeight + 'px';
+                            a.style.padding = '0 1.5rem 1.5rem';
+                            a.style.opacity = '1';
+                        }
+                    };
+                });
+            }
+            
+            // Try multiple times
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFAQ);
+            } else {
+                initFAQ();
+            }
+            window.addEventListener('load', function() {
+                setTimeout(initFAQ, 100);
+            });
+            setTimeout(initFAQ, 500);
+            setTimeout(initFAQ, 1000);
+        })();
+    </script>
 </body>
 </html>
 
