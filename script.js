@@ -2,17 +2,19 @@
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
 
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-    hamburger.classList.toggle('active');
-});
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+}
 
 // Close mobile menu when clicking on a link
 const navLinks = document.querySelectorAll('.nav-link');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
+        if (hamburger) hamburger.classList.remove('active');
     });
 });
 
@@ -35,19 +37,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const navbar = document.querySelector('.navbar');
 let lastScroll = 0;
 
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-    }
-    
-    lastScroll = currentScroll;
-});
+if (navbar) {
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        }
+        
+        lastScroll = currentScroll;
+    });
+}
 
 // Active navigation link highlighting
 const sections = document.querySelectorAll('section[id]');
@@ -76,70 +80,72 @@ window.addEventListener('scroll', highlightActiveSection);
 // Contact Form Handling - Redirects to WhatsApp
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form values
-    const name = document.getElementById('name').value;
-    const phone = document.getElementById('phone').value;
-    const email = document.getElementById('email').value;
-    const service = document.getElementById('service').value;
-    const message = document.getElementById('message').value;
-    
-    // Get service display name
-    const serviceOptions = {
-        'ro-purifier': 'RO Water Purifier',
-        'water-plant': 'Water Treatment Plant',
-        'installation': 'Installation',
-        'maintenance': 'Maintenance & Repair',
-        'amc': 'AMC (Annual Maintenance Contract)',
-        'consultation': 'Consultation',
-        'other': 'Other'
-    };
-    const serviceName = serviceOptions[service] || service;
-    
-    // Create WhatsApp message
-    let whatsappMessage = `Hello S7 Aqua,\n\n`;
-    whatsappMessage += `I'm interested in: *${serviceName}*\n\n`;
-    whatsappMessage += `*Name:* ${name}\n`;
-    whatsappMessage += `*Phone:* ${phone}\n`;
-    if (email) {
-        whatsappMessage += `*Email:* ${email}\n`;
-    }
-    whatsappMessage += `\n*Message:*\n${message}`;
-    
-    // Encode message for WhatsApp URL
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-    
-    // WhatsApp number: 8790616173 (with country code 91 for India)
-    const whatsappNumber = '918790616173';
-    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    
-    // Show success message
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-    const successMessage = contactForm.querySelector('.form-success');
-    const originalText = submitButton.textContent;
-    
-    submitButton.textContent = 'Opening WhatsApp...';
-    submitButton.style.background = '#25D366';
-    
-    if (successMessage) {
-        successMessage.classList.add('show');
-    }
-    
-    // Open WhatsApp link
-    window.open(whatsappLink, '_blank');
-    
-    // Reset button and hide success message after 3 seconds
-    setTimeout(() => {
-        submitButton.textContent = originalText;
-        submitButton.style.background = '';
-        if (successMessage) {
-            successMessage.classList.remove('show');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const service = document.getElementById('service').value;
+        const message = document.getElementById('message').value;
+        
+        // Get service display name
+        const serviceOptions = {
+            'ro-purifier': 'RO Water Purifier',
+            'water-plant': 'Water Treatment Plant',
+            'installation': 'Installation',
+            'maintenance': 'Maintenance & Repair',
+            'amc': 'AMC (Annual Maintenance Contract)',
+            'consultation': 'Consultation',
+            'other': 'Other'
+        };
+        const serviceName = serviceOptions[service] || service;
+        
+        // Create WhatsApp message
+        let whatsappMessage = `Hello S7 Aqua,\n\n`;
+        whatsappMessage += `I'm interested in: *${serviceName}*\n\n`;
+        whatsappMessage += `*Name:* ${name}\n`;
+        whatsappMessage += `*Phone:* ${phone}\n`;
+        if (email) {
+            whatsappMessage += `*Email:* ${email}\n`;
         }
-        contactForm.reset();
-    }, 3000);
-});
+        whatsappMessage += `\n*Message:*\n${message}`;
+        
+        // Encode message for WhatsApp URL
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        
+        // WhatsApp number: 8790616173 (with country code 91 for India)
+        const whatsappNumber = '918790616173';
+        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+        
+        // Show success message
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const successMessage = contactForm.querySelector('.form-success');
+        const originalText = submitButton.textContent;
+        
+        submitButton.textContent = 'Opening WhatsApp...';
+        submitButton.style.background = '#25D366';
+        
+        if (successMessage) {
+            successMessage.classList.add('show');
+        }
+        
+        // Open WhatsApp link
+        window.open(whatsappLink, '_blank');
+        
+        // Reset button and hide success message after 3 seconds
+        setTimeout(() => {
+            submitButton.textContent = originalText;
+            submitButton.style.background = '';
+            if (successMessage) {
+                successMessage.classList.remove('show');
+            }
+            contactForm.reset();
+        }, 3000);
+    });
+}
 
 // Intersection Observer for fade-in animations
 const observerOptions = {
@@ -221,13 +227,15 @@ window.addEventListener('load', () => {
     }, 100);
 });
 
-// Statistics Counter Animation
-function animateCounter(element, target, duration = 2000) {
-    let start = 0;
-    const increment = target / (duration / 16);
+// ========== STATISTICS COUNTER - SIMPLE AND RELIABLE ==========
+function animateCounter(element, target) {
+    if (!element || !target) return;
+    
+    let current = 0;
+    const increment = target / 50; // 50 steps
     const timer = setInterval(() => {
-        start += increment;
-        if (start >= target) {
+        current += increment;
+        if (current >= target) {
             if (target === 24) {
                 element.textContent = '24/7';
             } else {
@@ -236,177 +244,97 @@ function animateCounter(element, target, duration = 2000) {
             clearInterval(timer);
         } else {
             if (target === 24) {
-                element.textContent = Math.floor(start) + '/7';
+                element.textContent = Math.floor(current) + '/7';
             } else {
-                element.textContent = Math.floor(start) + '+';
+                element.textContent = Math.floor(current) + '+';
             }
         }
-    }, 16);
+    }, 40);
 }
 
-// Statistics Counter - Initialize and animate
-function initStatisticsCounter() {
-    const statisticsSection = document.querySelector('.statistics');
-    if (!statisticsSection) {
-        console.log('Statistics section not found');
-        return;
-    }
+function startStatisticsAnimation() {
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (statNumbers.length === 0) return;
     
-    const statNumbers = statisticsSection.querySelectorAll('.stat-number');
-    if (statNumbers.length === 0) {
-        console.log('No stat numbers found');
-        return;
-    }
-    
-    let hasAnimated = false;
-    
-    // Function to start animation
-    const startAnimation = () => {
-        if (hasAnimated) return;
-        hasAnimated = true;
-        console.log('Starting statistics animation');
-        
-        statNumbers.forEach((stat, index) => {
-            const target = parseInt(stat.getAttribute('data-target'));
-            if (target) {
-                console.log(`Animating stat ${index}: ${target}`);
-                animateCounter(stat, target);
-            }
-        });
-    };
-    
-    // Use Intersection Observer
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !hasAnimated) {
-                console.log('Statistics section is intersecting');
-                startAnimation();
-                statsObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1, rootMargin: '100px' });
-    
-    statsObserver.observe(statisticsSection);
-    
-    // Also try to start immediately if section is visible
-    setTimeout(() => {
-        const rect = statisticsSection.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        if (isVisible && !hasAnimated) {
-            console.log('Statistics section already visible, starting animation');
-            startAnimation();
+    statNumbers.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-target'));
+        if (target && stat.textContent.trim() === '0') {
+            animateCounter(stat, target);
         }
-    }, 500);
+    });
 }
 
-// Initialize on both DOMContentLoaded and window load
-document.addEventListener('DOMContentLoaded', () => {
-    initStatisticsCounter();
-    
-    // Fallback: Start animation after 2 seconds if still at 0
-    setTimeout(() => {
-        const statisticsSection = document.querySelector('.statistics');
-        if (statisticsSection) {
-            const statNumbers = statisticsSection.querySelectorAll('.stat-number');
-            statNumbers.forEach(stat => {
-                const currentValue = parseInt(stat.textContent.trim());
-                if (currentValue === 0 || isNaN(currentValue)) {
-                    const target = parseInt(stat.getAttribute('data-target'));
-                    if (target) {
-                        console.log('Fallback: Starting statistics animation');
-                        animateCounter(stat, target);
-                    }
-                }
-            });
-        }
-    }, 2000);
-});
-
+// Start statistics animation when page loads
 window.addEventListener('load', () => {
-    setTimeout(() => {
-        const statisticsSection = document.querySelector('.statistics');
-        if (statisticsSection) {
-            const statNumbers = statisticsSection.querySelectorAll('.stat-number');
-            let needsAnimation = false;
-            statNumbers.forEach(stat => {
-                const currentValue = parseInt(stat.textContent.trim());
-                if (currentValue === 0 || isNaN(currentValue)) {
-                    needsAnimation = true;
-                }
-            });
-            if (needsAnimation) {
-                initStatisticsCounter();
-            }
-        }
-    }, 500);
+    setTimeout(startStatisticsAnimation, 500);
 });
 
-// FAQ Accordion Functionality - Simple and reliable
-(function() {
-    let faqInitialized = false;
+// Also start when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(startStatisticsAnimation, 1000);
+    });
+} else {
+    setTimeout(startStatisticsAnimation, 1000);
+}
+
+// Fallback: Start after 3 seconds no matter what
+setTimeout(startStatisticsAnimation, 3000);
+
+// ========== FAQ ACCORDION - SIMPLE AND RELIABLE ==========
+function initFAQAccordion() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    if (faqItems.length === 0) return;
     
-    function initFAQ() {
-        if (faqInitialized) return;
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
         
-        const faqItems = document.querySelectorAll('.faq-item');
+        if (!question || !answer) return;
         
-        if (faqItems.length === 0) return;
+        // Ensure answer is hidden initially
+        item.classList.remove('active');
+        answer.style.maxHeight = '0';
+        answer.style.padding = '0 1.5rem';
+        answer.style.opacity = '0';
+        answer.style.display = 'block';
         
-        faqInitialized = true;
-        
-        faqItems.forEach((item) => {
-            const question = item.querySelector('.faq-question');
-            const answer = item.querySelector('.faq-answer');
+        // Add click handler
+        question.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            if (!question || !answer) return;
+            const isActive = item.classList.contains('active');
             
-            // Ensure FAQ answer is initially hidden
-            item.classList.remove('active');
-            answer.style.maxHeight = '0';
-            answer.style.padding = '0 1.5rem';
-            answer.style.opacity = '0';
-            answer.style.display = 'block';
-            
-            // Add click handler - use onclick for reliability
-            question.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const isActive = item.classList.contains('active');
-                
-                // Close all FAQ items
-                faqItems.forEach(faqItem => {
-                    faqItem.classList.remove('active');
-                    const faqAnswer = faqItem.querySelector('.faq-answer');
-                    if (faqAnswer) {
-                        faqAnswer.style.maxHeight = '0';
-                        faqAnswer.style.padding = '0 1.5rem';
-                        faqAnswer.style.opacity = '0';
-                    }
-                });
-                
-                // Open clicked item if it wasn't active
-                if (!isActive) {
-                    item.classList.add('active');
-                    const scrollHeight = answer.scrollHeight;
-                    answer.style.maxHeight = scrollHeight + 'px';
-                    answer.style.padding = '0 1.5rem 1.5rem';
-                    answer.style.opacity = '1';
+            // Close all items
+            faqItems.forEach(faqItem => {
+                faqItem.classList.remove('active');
+                const faqAnswer = faqItem.querySelector('.faq-answer');
+                if (faqAnswer) {
+                    faqAnswer.style.maxHeight = '0';
+                    faqAnswer.style.padding = '0 1.5rem';
+                    faqAnswer.style.opacity = '0';
                 }
-            };
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+                const scrollHeight = answer.scrollHeight;
+                answer.style.maxHeight = scrollHeight + 'px';
+                answer.style.padding = '0 1.5rem 1.5rem';
+                answer.style.opacity = '1';
+            }
         });
-    }
-    
-    // Initialize on DOM ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFAQ);
-    } else {
-        initFAQ();
-    }
-    
-    // Also try on window load
-    window.addEventListener('load', initFAQ);
-})();
+    });
+}
+
+// Initialize FAQ on multiple events
+document.addEventListener('DOMContentLoaded', initFAQAccordion);
+window.addEventListener('load', () => {
+    setTimeout(initFAQAccordion, 100);
+});
+setTimeout(initFAQAccordion, 500);
 
 // Enhanced Form Validation
 document.addEventListener('DOMContentLoaded', () => {
@@ -448,4 +376,3 @@ window.addEventListener('scroll', () => {
         hero.style.transform = `translateY(${rate}px)`;
     }
 });
-
