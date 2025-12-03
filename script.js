@@ -238,6 +238,10 @@ function animateCounter(element, target) {
         if (current >= target) {
             if (target === 24) {
                 element.textContent = '24/7';
+            } else if (target >= 1000) {
+                // Format numbers >= 1000 with 'k' notation
+                const kValue = (target / 1000).toFixed(0);
+                element.textContent = kValue + 'k+';
             } else {
                 element.textContent = target + '+';
             }
@@ -245,6 +249,14 @@ function animateCounter(element, target) {
         } else {
             if (target === 24) {
                 element.textContent = Math.floor(current) + '/7';
+            } else if (target >= 1000) {
+                // Format numbers >= 1000 with 'k' notation during animation
+                const kValue = Math.floor(current / 1000);
+                if (kValue > 0) {
+                    element.textContent = kValue + 'k+';
+                } else {
+                    element.textContent = Math.floor(current) + '+';
+                }
             } else {
                 element.textContent = Math.floor(current) + '+';
             }
