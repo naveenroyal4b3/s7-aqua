@@ -24,7 +24,7 @@ S7 Aqua provides premium quality RO water purifiers and water treatment plants w
 
 ## Website
 
-Visit the live website: [https://yourusername.github.io/s7-aqua](https://yourusername.github.io/s7-aqua)
+Visit the live website: [https://naveenroyal4b3.github.io/s7-aqua](https://naveenroyal4b3.github.io/s7-aqua)
 
 ---
 
