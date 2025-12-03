@@ -719,6 +719,7 @@ section {
     box-shadow: var(--shadow);
     overflow: hidden;
     transition: var(--transition);
+    cursor: pointer;
 }
 
 .faq-item.active {
@@ -732,6 +733,8 @@ section {
     justify-content: space-between;
     align-items: center;
     transition: var(--transition);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .faq-question:hover {

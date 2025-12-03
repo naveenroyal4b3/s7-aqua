@@ -247,79 +247,120 @@ function animateCounter(element, target, duration = 2000) {
 // Statistics Counter - Initialize and animate
 function initStatisticsCounter() {
     const statisticsSection = document.querySelector('.statistics');
-    if (!statisticsSection) return;
+    if (!statisticsSection) {
+        console.log('Statistics section not found');
+        return;
+    }
     
     const statNumbers = statisticsSection.querySelectorAll('.stat-number');
-    let hasAnimated = false;
+    if (statNumbers.length === 0) {
+        console.log('No stat numbers found');
+        return;
+    }
     
-    // Initialize counters to 0
-    statNumbers.forEach(stat => {
-        stat.textContent = '0';
-    });
+    let hasAnimated = false;
     
     // Function to start animation
     const startAnimation = () => {
         if (hasAnimated) return;
         hasAnimated = true;
+        console.log('Starting statistics animation');
         
-        statNumbers.forEach(stat => {
+        statNumbers.forEach((stat, index) => {
             const target = parseInt(stat.getAttribute('data-target'));
             if (target) {
+                console.log(`Animating stat ${index}: ${target}`);
                 animateCounter(stat, target);
             }
         });
     };
     
-    // Check if section is already visible
-    const rect = statisticsSection.getBoundingClientRect();
-    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    // Use Intersection Observer
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !hasAnimated) {
+                console.log('Statistics section is intersecting');
+                startAnimation();
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '100px' });
     
-    if (isVisible) {
-        // Section is already visible, start animation after a short delay
-        setTimeout(startAnimation, 300);
-    } else {
-        // Use Intersection Observer for sections not yet visible
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    startAnimation();
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '50px' });
-        
-        statsObserver.observe(statisticsSection);
-    }
+    statsObserver.observe(statisticsSection);
+    
+    // Also try to start immediately if section is visible
+    setTimeout(() => {
+        const rect = statisticsSection.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isVisible && !hasAnimated) {
+            console.log('Statistics section already visible, starting animation');
+            startAnimation();
+        }
+    }, 500);
 }
 
+// Initialize on both DOMContentLoaded and window load
 document.addEventListener('DOMContentLoaded', () => {
     initStatisticsCounter();
+});
+
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const statisticsSection = document.querySelector('.statistics');
+        if (statisticsSection) {
+            const statNumbers = statisticsSection.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                if (stat.textContent.trim() === '0') {
+                    initStatisticsCounter();
+                }
+            });
+        }
+    }, 1000);
 });
 
 // FAQ Accordion Functionality
 function initFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
     
-    if (faqItems.length === 0) return;
+    console.log(`Found ${faqItems.length} FAQ items`);
+    
+    if (faqItems.length === 0) {
+        console.log('No FAQ items found');
+        return;
+    }
     
     faqItems.forEach((item, index) => {
         const question = item.querySelector('.faq-question');
         const answer = item.querySelector('.faq-answer');
         
-        if (!question || !answer) return;
-        
-        // Ensure FAQ answer is initially hidden
-        if (!item.classList.contains('active')) {
-            answer.style.maxHeight = '0';
-            answer.style.padding = '0 1.5rem';
-            answer.style.opacity = '0';
+        if (!question) {
+            console.log(`FAQ item ${index}: No question found`);
+            return;
         }
         
-        // Add click handler
-        question.style.cursor = 'pointer';
-        question.addEventListener('click', function(e) {
+        if (!answer) {
+            console.log(`FAQ item ${index}: No answer found`);
+            return;
+        }
+        
+        // Ensure FAQ answer is initially hidden
+        item.classList.remove('active');
+        answer.style.maxHeight = '0';
+        answer.style.padding = '0 1.5rem';
+        answer.style.opacity = '0';
+        answer.style.display = 'block';
+        
+        // Remove any existing event listeners by cloning
+        const newQuestion = question.cloneNode(true);
+        question.parentNode.replaceChild(newQuestion, question);
+        
+        // Add click handler to the entire question area
+        newQuestion.style.cursor = 'pointer';
+        newQuestion.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            
+            console.log(`FAQ item ${index} clicked`);
             
             const isActive = item.classList.contains('active');
             
@@ -336,23 +377,41 @@ function initFAQ() {
             
             // Open clicked item if it wasn't active
             if (!isActive) {
+                console.log(`Opening FAQ item ${index}`);
                 item.classList.add('active');
-                answer.style.maxHeight = answer.scrollHeight + 'px';
+                const scrollHeight = answer.scrollHeight;
+                answer.style.maxHeight = scrollHeight + 'px';
                 answer.style.padding = '0 1.5rem 1.5rem';
                 answer.style.opacity = '1';
+            } else {
+                console.log(`Closing FAQ item ${index}`);
             }
         });
+        
+        console.log(`FAQ item ${index} initialized`);
     });
+    
+    console.log('FAQ initialization complete');
 }
 
+// Initialize FAQ multiple times to ensure it works
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded - Initializing FAQ');
     initFAQ();
 });
 
-// Also initialize on window load as backup
 window.addEventListener('load', () => {
-    setTimeout(initFAQ, 100);
+    console.log('Window load - Initializing FAQ');
+    setTimeout(() => {
+        initFAQ();
+    }, 200);
 });
+
+// Also try after a delay
+setTimeout(() => {
+    console.log('Delayed initialization - Initializing FAQ');
+    initFAQ();
+}, 1000);
 
 // Enhanced Form Validation
 document.addEventListener('DOMContentLoaded', () => {
