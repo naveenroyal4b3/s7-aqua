@@ -228,10 +228,18 @@ function animateCounter(element, target, duration = 2000) {
     const timer = setInterval(() => {
         start += increment;
         if (start >= target) {
-            element.textContent = target + (target === 24 ? '/7' : '+');
+            if (target === 24) {
+                element.textContent = '24/7';
+            } else {
+                element.textContent = target + '+';
+            }
             clearInterval(timer);
         } else {
-            element.textContent = Math.floor(start) + (target === 24 ? '/7' : '+');
+            if (target === 24) {
+                element.textContent = Math.floor(start) + '/7';
+            } else {
+                element.textContent = Math.floor(start) + '+';
+            }
         }
     }, 16);
 }
@@ -243,18 +251,24 @@ const statsObserver = new IntersectionObserver((entries) => {
             const statNumbers = entry.target.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
                 const target = parseInt(stat.getAttribute('data-target'));
-                if (target && stat.textContent === '0') {
+                const currentValue = parseInt(stat.textContent.trim()) || 0;
+                if (target && currentValue === 0) {
                     animateCounter(stat, target);
                 }
             });
             statsObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.5 });
+}, { threshold: 0.3 });
 
 document.addEventListener('DOMContentLoaded', () => {
     const statisticsSection = document.querySelector('.statistics');
     if (statisticsSection) {
+        // Initialize counters to 0 explicitly
+        const statNumbers = statisticsSection.querySelectorAll('.stat-number');
+        statNumbers.forEach(stat => {
+            stat.textContent = '0';
+        });
         statsObserver.observe(statisticsSection);
     }
 });
@@ -263,23 +277,35 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const faqItems = document.querySelectorAll('.faq-item');
     
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        
-        question.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
+    if (faqItems.length > 0) {
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
             
-            // Close all FAQ items
-            faqItems.forEach(faqItem => {
-                faqItem.classList.remove('active');
-            });
-            
-            // Open clicked item if it wasn't active
-            if (!isActive) {
-                item.classList.add('active');
+            if (question) {
+                question.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all FAQ items
+                    faqItems.forEach(faqItem => {
+                        faqItem.classList.remove('active');
+                    });
+                    
+                    // Open clicked item if it wasn't active
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Ensure FAQ answer is initially hidden
+                const answer = item.querySelector('.faq-answer');
+                if (answer && !item.classList.contains('active')) {
+                    answer.style.maxHeight = '0';
+                    answer.style.padding = '0 1.5rem';
+                }
             }
         });
-    });
+    }
 });
 
 // Enhanced Form Validation
