@@ -609,6 +609,9 @@ section {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: var(--white);
     padding: 60px 0;
+    display: block;
+    visibility: visible;
+    opacity: 1;
 }
 
 .stats-grid {
@@ -640,6 +643,9 @@ section {
 .testimonials {
     background: var(--white);
     padding: 80px 0;
+    display: block;
+    visibility: visible;
+    opacity: 1;
 }
 
 .testimonials-grid {
@@ -696,6 +702,9 @@ section {
 .faq {
     background: var(--light-color);
     padding: 80px 0;
+    display: block;
+    visibility: visible;
+    opacity: 1;
 }
 
 .faq-container {

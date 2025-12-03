@@ -156,15 +156,38 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe service cards and product cards
+// Observe service cards, product cards, testimonials, and FAQ items
 document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.service-card, .product-card, .info-card');
+    const cards = document.querySelectorAll('.service-card, .product-card, .info-card, .testimonial-card, .stat-item');
     cards.forEach(card => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
         card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(card);
     });
+    
+    // Ensure sections are visible
+    const statisticsSection = document.querySelector('.statistics');
+    const testimonialsSection = document.querySelector('.testimonials');
+    const faqSection = document.querySelector('.faq');
+    
+    if (statisticsSection) {
+        statisticsSection.style.display = 'block';
+        statisticsSection.style.visibility = 'visible';
+        statisticsSection.style.opacity = '1';
+    }
+    
+    if (testimonialsSection) {
+        testimonialsSection.style.display = 'block';
+        testimonialsSection.style.visibility = 'visible';
+        testimonialsSection.style.opacity = '1';
+    }
+    
+    if (faqSection) {
+        faqSection.style.display = 'block';
+        faqSection.style.visibility = 'visible';
+        faqSection.style.opacity = '1';
+    }
 });
 
 // Phone number click handler
