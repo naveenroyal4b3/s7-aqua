@@ -117,19 +117,28 @@ contactForm.addEventListener('submit', function(e) {
     
     // Show success message
     const submitButton = contactForm.querySelector('button[type="submit"]');
+    const successMessage = contactForm.querySelector('.form-success');
     const originalText = submitButton.textContent;
+    
     submitButton.textContent = 'Opening WhatsApp...';
     submitButton.style.background = '#25D366';
+    
+    if (successMessage) {
+        successMessage.classList.add('show');
+    }
     
     // Open WhatsApp link
     window.open(whatsappLink, '_blank');
     
-    // Reset button after 2 seconds
+    // Reset button and hide success message after 3 seconds
     setTimeout(() => {
         submitButton.textContent = originalText;
         submitButton.style.background = '';
+        if (successMessage) {
+            successMessage.classList.remove('show');
+        }
         contactForm.reset();
-    }, 2000);
+    }, 3000);
 });
 
 // Intersection Observer for fade-in animations
@@ -187,5 +196,107 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
+});
+
+// Statistics Counter Animation
+function animateCounter(element, target, duration = 2000) {
+    let start = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+            element.textContent = target + (target === 24 ? '/7' : '+');
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(start) + (target === 24 ? '/7' : '+');
+        }
+    }, 16);
+}
+
+// Observe statistics section for counter animation
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const statNumbers = entry.target.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                if (target && stat.textContent === '0') {
+                    animateCounter(stat, target);
+                }
+            });
+            statsObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const statisticsSection = document.querySelector('.statistics');
+    if (statisticsSection) {
+        statsObserver.observe(statisticsSection);
+    }
+});
+
+// FAQ Accordion Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            
+            // Close all FAQ items
+            faqItems.forEach(faqItem => {
+                faqItem.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
+});
+
+// Enhanced Form Validation
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        // Create success message element
+        const successMessage = document.createElement('div');
+        successMessage.className = 'form-success';
+        successMessage.textContent = '✓ Message sent successfully! Redirecting to WhatsApp...';
+        contactForm.insertBefore(successMessage, contactForm.firstChild);
+        
+        // Enhanced form validation
+        const formInputs = contactForm.querySelectorAll('input, select, textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.style.borderColor = '#dc3545';
+                } else {
+                    this.style.borderColor = '#e0e0e0';
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.style.borderColor === 'rgb(220, 53, 69)') {
+                    this.style.borderColor = '#e0e0e0';
+                }
+            });
+        });
+    }
+});
+
+// Add subtle parallax effect to hero section (optional enhancement)
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero');
+    if (hero && window.pageYOffset < hero.offsetHeight) {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * 0.3;
+        hero.style.transform = `translateY(${rate}px)`;
+    }
 });
 
