@@ -302,6 +302,24 @@ function initStatisticsCounter() {
 // Initialize on both DOMContentLoaded and window load
 document.addEventListener('DOMContentLoaded', () => {
     initStatisticsCounter();
+    
+    // Fallback: Start animation after 2 seconds if still at 0
+    setTimeout(() => {
+        const statisticsSection = document.querySelector('.statistics');
+        if (statisticsSection) {
+            const statNumbers = statisticsSection.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const currentValue = parseInt(stat.textContent.trim());
+                if (currentValue === 0 || isNaN(currentValue)) {
+                    const target = parseInt(stat.getAttribute('data-target'));
+                    if (target) {
+                        console.log('Fallback: Starting statistics animation');
+                        animateCounter(stat, target);
+                    }
+                }
+            });
+        }
+    }, 2000);
 });
 
 window.addEventListener('load', () => {
@@ -309,13 +327,18 @@ window.addEventListener('load', () => {
         const statisticsSection = document.querySelector('.statistics');
         if (statisticsSection) {
             const statNumbers = statisticsSection.querySelectorAll('.stat-number');
+            let needsAnimation = false;
             statNumbers.forEach(stat => {
-                if (stat.textContent.trim() === '0') {
-                    initStatisticsCounter();
+                const currentValue = parseInt(stat.textContent.trim());
+                if (currentValue === 0 || isNaN(currentValue)) {
+                    needsAnimation = true;
                 }
             });
+            if (needsAnimation) {
+                initStatisticsCounter();
+            }
         }
-    }, 1000);
+    }, 500);
 });
 
 // FAQ Accordion Functionality - Simple and reliable
