@@ -762,15 +762,16 @@ section {
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.4s ease;
+    transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease;
     padding: 0 1.5rem;
     opacity: 0;
+    display: block;
 }
 
 .faq-item.active .faq-answer {
-    max-height: 1000px;
-    padding: 0 1.5rem 1.5rem;
-    opacity: 1;
+    max-height: 2000px !important;
+    padding: 0 1.5rem 1.5rem !important;
+    opacity: 1 !important;
     transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease 0.1s;
 }
 

@@ -244,68 +244,114 @@ function animateCounter(element, target, duration = 2000) {
     }, 16);
 }
 
-// Observe statistics section for counter animation
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const statNumbers = entry.target.querySelectorAll('.stat-number');
-            statNumbers.forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-target'));
-                const currentValue = parseInt(stat.textContent.trim()) || 0;
-                if (target && currentValue === 0) {
-                    animateCounter(stat, target);
+// Statistics Counter - Initialize and animate
+function initStatisticsCounter() {
+    const statisticsSection = document.querySelector('.statistics');
+    if (!statisticsSection) return;
+    
+    const statNumbers = statisticsSection.querySelectorAll('.stat-number');
+    let hasAnimated = false;
+    
+    // Initialize counters to 0
+    statNumbers.forEach(stat => {
+        stat.textContent = '0';
+    });
+    
+    // Function to start animation
+    const startAnimation = () => {
+        if (hasAnimated) return;
+        hasAnimated = true;
+        
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-target'));
+            if (target) {
+                animateCounter(stat, target);
+            }
+        });
+    };
+    
+    // Check if section is already visible
+    const rect = statisticsSection.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (isVisible) {
+        // Section is already visible, start animation after a short delay
+        setTimeout(startAnimation, 300);
+    } else {
+        // Use Intersection Observer for sections not yet visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startAnimation();
+                    statsObserver.unobserve(entry.target);
                 }
             });
-            statsObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.3 });
-
-document.addEventListener('DOMContentLoaded', () => {
-    const statisticsSection = document.querySelector('.statistics');
-    if (statisticsSection) {
-        // Initialize counters to 0 explicitly
-        const statNumbers = statisticsSection.querySelectorAll('.stat-number');
-        statNumbers.forEach(stat => {
-            stat.textContent = '0';
-        });
+        }, { threshold: 0.1, rootMargin: '50px' });
+        
         statsObserver.observe(statisticsSection);
     }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initStatisticsCounter();
 });
 
 // FAQ Accordion Functionality
-document.addEventListener('DOMContentLoaded', () => {
+function initFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
     
-    if (faqItems.length > 0) {
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
+    if (faqItems.length === 0) return;
+    
+    faqItems.forEach((item, index) => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        
+        if (!question || !answer) return;
+        
+        // Ensure FAQ answer is initially hidden
+        if (!item.classList.contains('active')) {
+            answer.style.maxHeight = '0';
+            answer.style.padding = '0 1.5rem';
+            answer.style.opacity = '0';
+        }
+        
+        // Add click handler
+        question.style.cursor = 'pointer';
+        question.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            if (question) {
-                question.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const isActive = item.classList.contains('active');
-                    
-                    // Close all FAQ items
-                    faqItems.forEach(faqItem => {
-                        faqItem.classList.remove('active');
-                    });
-                    
-                    // Open clicked item if it wasn't active
-                    if (!isActive) {
-                        item.classList.add('active');
-                    }
-                });
-                
-                // Ensure FAQ answer is initially hidden
-                const answer = item.querySelector('.faq-answer');
-                if (answer && !item.classList.contains('active')) {
-                    answer.style.maxHeight = '0';
-                    answer.style.padding = '0 1.5rem';
+            const isActive = item.classList.contains('active');
+            
+            // Close all FAQ items
+            faqItems.forEach(faqItem => {
+                faqItem.classList.remove('active');
+                const faqAnswer = faqItem.querySelector('.faq-answer');
+                if (faqAnswer) {
+                    faqAnswer.style.maxHeight = '0';
+                    faqAnswer.style.padding = '0 1.5rem';
+                    faqAnswer.style.opacity = '0';
                 }
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                answer.style.padding = '0 1.5rem 1.5rem';
+                answer.style.opacity = '1';
             }
         });
-    }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initFAQ();
+});
+
+// Also initialize on window load as backup
+window.addEventListener('load', () => {
+    setTimeout(initFAQ, 100);
 });
 
 // Enhanced Form Validation
