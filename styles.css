@@ -1048,6 +1048,10 @@ section {
     .logo-name {
         font-size: 1rem;
     }
+    
+    .logo-tagline {
+        font-size: 0.65rem;
+    }
 
     .btn {
         width: 100%;
