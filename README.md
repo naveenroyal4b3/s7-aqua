@@ -1,10 +1,10 @@
-# S7 Aqua - Water Purification Solutions
+# s7 aqua RO water solutions - Water Purification Solutions
 
-Website for S7 Aqua, a brand of S7 Enterprises, specializing in RO mineral water purifiers and water treatment plants.
+Website for s7 aqua RO water solutions, a brand of S7 Enterprises, specializing in RO mineral water purifiers and water treatment plants.
 
 ## About
 
-S7 Aqua provides premium quality RO water purifiers and water treatment plants with comprehensive sales, installation, and maintenance services.
+s7 aqua RO water solutions provides premium quality RO water purifiers and water treatment plants with comprehensive sales, installation, and maintenance services.
 
 ## Services
 
@@ -28,5 +28,5 @@ Visit the live website: [https://naveenroyal4b3.github.io/s7-aqua](https://navee
 
 ---
 
-© 2024 S7 Enterprises. All rights reserved. | Brand: S7 Aqua
+© 2024 S7 Enterprises. All rights reserved. | Brand: s7 aqua RO water solutions
 
