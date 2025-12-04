@@ -392,7 +392,11 @@ window.addEventListener('scroll', () => {
 
 // Gallery Filter Functionality
 (function() {
+    let galleryInitialized = false;
+    
     function initGallery() {
+        if (galleryInitialized) return;
+        
         const galleryTabs = document.querySelectorAll('.gallery-tab');
         const galleryItems = document.querySelectorAll('.gallery-item');
         
@@ -400,14 +404,19 @@ window.addEventListener('scroll', () => {
         console.log('Gallery items found:', galleryItems.length);
         
         if (galleryTabs.length > 0 && galleryItems.length > 0) {
+            galleryInitialized = true;
+            
             // Ensure all items are visible initially
             galleryItems.forEach(item => {
                 item.classList.remove('hidden');
-                item.style.display = 'block';
             });
             
+            // Add click handlers to tabs
             galleryTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
                     // Remove active class from all tabs
                     galleryTabs.forEach(t => t.classList.remove('active'));
                     // Add active class to clicked tab
@@ -420,15 +429,12 @@ window.addEventListener('scroll', () => {
                     galleryItems.forEach(item => {
                         if (category === 'all') {
                             item.classList.remove('hidden');
-                            item.style.display = 'block';
                         } else {
                             const itemCategory = item.getAttribute('data-category');
                             if (itemCategory === category) {
                                 item.classList.remove('hidden');
-                                item.style.display = 'block';
                             } else {
                                 item.classList.add('hidden');
-                                item.style.display = 'none';
                             }
                         }
                     });

@@ -1066,6 +1066,9 @@ section {
     color: var(--text-color);
     cursor: pointer;
     transition: var(--transition);
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .gallery-tab:hover {
