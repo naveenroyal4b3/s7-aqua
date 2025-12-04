@@ -81,28 +81,12 @@ body {
     transform: scale(1.02);
 }
 
-.logo-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2px;
-}
-
 .logo-name {
     font-size: 1.4rem;
     color: var(--primary-color);
     font-weight: 700;
     margin: 0;
     line-height: 1.2;
-}
-
-.logo .tagline {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    font-weight: 400;
-    font-style: italic;
-    margin: 0;
-    line-height: 1;
 }
 
 .logo-svg {
