@@ -1051,6 +1051,24 @@ section {
     }
     
     .logo {
+        max-width: 250px;
+        gap: 8px;
+    }
+    
+    .logo-img {
+        height: 45px;
+        max-width: 80px;
+    }
+    
+    .logo-name {
+        font-size: 1rem;
+    }
+    
+    .logo .tagline {
+        font-size: 0.65rem;
+    }
+    
+    .logo {
         max-width: 180px;
         height: 45px;
     }
