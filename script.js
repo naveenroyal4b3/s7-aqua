@@ -105,7 +105,7 @@ if (contactForm) {
         const serviceName = serviceOptions[service] || service;
         
         // Create WhatsApp message
-        let whatsappMessage = `Hello s7 aqua RO water solutions,\n\n`;
+        let whatsappMessage = `Hello S7 Aqua RO Water Solutions,\n\n`;
         whatsappMessage += `I'm interested in: *${serviceName}*\n\n`;
         whatsappMessage += `*Name:* ${name}\n`;
         whatsappMessage += `*Phone:* ${phone}\n`;
