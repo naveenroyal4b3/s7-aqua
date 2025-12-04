@@ -100,21 +100,6 @@ body {
     transform: scale(1.02);
 }
 
-.logo h1 {
-    font-size: 1.8rem;
-    color: var(--primary-color);
-    font-weight: 700;
-    margin-bottom: 0;
-    display: none; /* Hide text logo, show SVG */
-}
-
-.logo .tagline {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    font-weight: 400;
-    display: block;
-    margin-top: -5px;
-}
 
 .nav-menu {
     display: flex;
@@ -1047,10 +1032,6 @@ section {
     .logo-name {
         font-size: 1rem;
     }
-    
-    .logo .tagline {
-        font-size: 0.65rem;
-    }
 
     .btn {
         width: 100%;
@@ -1079,10 +1060,6 @@ section {
     
     .logo-name {
         font-size: 0.85rem;
-    }
-    
-    .logo .tagline {
-        font-size: 0.6rem;
     }
 
     .section-title {
