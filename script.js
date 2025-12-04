@@ -390,7 +390,30 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Gallery Filter Functionality - Using Event Delegation
+// Gallery Filter Functionality - Direct function for onclick handlers
+function filterGallery(category, clickedButton) {
+    // Update active tab
+    const allTabs = document.querySelectorAll('.gallery-tab');
+    allTabs.forEach(tab => tab.classList.remove('active'));
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
+    
+    // Filter gallery items
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    galleryItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        if (category === 'all' || itemCategory === category) {
+            item.classList.remove('hidden');
+            item.style.display = '';
+        } else {
+            item.classList.add('hidden');
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Also use event delegation as backup
 (function() {
     function initGalleryFilter() {
         const galleryTabsContainer = document.querySelector('.gallery-tabs');
@@ -399,34 +422,13 @@ window.addEventListener('scroll', () => {
             return;
         }
         
-        // Use event delegation on the container
+        // Use event delegation on the container as backup
         galleryTabsContainer.addEventListener('click', function(e) {
             const clickedTab = e.target.closest('.gallery-tab');
             if (!clickedTab) return;
             
-            e.preventDefault();
-            e.stopPropagation();
-            
             const category = clickedTab.getAttribute('data-category');
-            console.log('Gallery filter clicked:', category);
-            
-            // Update active tab
-            const allTabs = document.querySelectorAll('.gallery-tab');
-            allTabs.forEach(tab => tab.classList.remove('active'));
-            clickedTab.classList.add('active');
-            
-            // Filter gallery items
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                if (category === 'all' || itemCategory === category) {
-                    item.classList.remove('hidden');
-                    item.style.display = '';
-                } else {
-                    item.classList.add('hidden');
-                    item.style.display = 'none';
-                }
-            });
+            filterGallery(category, clickedTab);
         });
         
         // Ensure all items are visible initially
