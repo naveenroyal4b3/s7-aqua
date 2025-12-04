@@ -391,61 +391,90 @@ window.addEventListener('scroll', () => {
 });
 
 // Gallery Filter Functionality
-(function() {
-    function initGallery() {
-        const galleryTabs = document.querySelectorAll('.gallery-tab');
+document.addEventListener('DOMContentLoaded', function() {
+    function filterGallery(category) {
         const galleryItems = document.querySelectorAll('.gallery-item');
+        const galleryTabs = document.querySelectorAll('.gallery-tab');
         
-        if (galleryTabs.length === 0 || galleryItems.length === 0) {
+        // Update active tab
+        galleryTabs.forEach(tab => {
+            if (tab.getAttribute('data-category') === category) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+        
+        // Filter items
+        galleryItems.forEach(item => {
+            const itemCategory = item.getAttribute('data-category');
+            if (category === 'all' || itemCategory === category) {
+                item.classList.remove('hidden');
+                item.style.display = '';
+            } else {
+                item.classList.add('hidden');
+                item.style.display = 'none';
+            }
+        });
+    }
+    
+    // Initialize gallery filter
+    function initGalleryFilter() {
+        const galleryTabs = document.querySelectorAll('.gallery-tab');
+        
+        if (galleryTabs.length === 0) {
             return;
         }
         
         // Ensure all items are visible initially
+        const galleryItems = document.querySelectorAll('.gallery-item');
         galleryItems.forEach(item => {
             item.classList.remove('hidden');
             item.style.display = '';
         });
         
-        // Add click handlers to tabs
+        // Add click handlers
         galleryTabs.forEach(tab => {
-            // Remove any existing listeners by cloning
-            const newTab = tab.cloneNode(true);
-            tab.parentNode.replaceChild(newTab, tab);
-            
-            newTab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
+            tab.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const category = this.getAttribute('data-category');
+                filterGallery(category);
+            });
+        });
+    }
+    
+    // Initialize
+    initGalleryFilter();
+    
+    // Also try after a short delay
+    setTimeout(initGalleryFilter, 100);
+});
+
+// Also initialize on window load
+window.addEventListener('load', function() {
+    const galleryTabs = document.querySelectorAll('.gallery-tab');
+    if (galleryTabs.length > 0) {
+        galleryTabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const category = this.getAttribute('data-category');
+                const galleryItems = document.querySelectorAll('.gallery-item');
+                const allTabs = document.querySelectorAll('.gallery-tab');
+                
+                allTabs.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
                 
-                const category = this.getAttribute('data-category');
-                
-                // Filter gallery items
-                document.querySelectorAll('.gallery-item').forEach(item => {
-                    if (category === 'all') {
+                galleryItems.forEach(item => {
+                    const itemCategory = item.getAttribute('data-category');
+                    if (category === 'all' || itemCategory === category) {
                         item.classList.remove('hidden');
                         item.style.display = '';
                     } else {
-                        const itemCategory = item.getAttribute('data-category');
-                        if (itemCategory === category) {
-                            item.classList.remove('hidden');
-                            item.style.display = '';
-                        } else {
-                            item.classList.add('hidden');
-                            item.style.display = 'none';
-                        }
+                        item.classList.add('hidden');
+                        item.style.display = 'none';
                     }
                 });
             });
         });
     }
-    
-    // Initialize on multiple events
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initGallery);
-    } else {
-        initGallery();
-    }
-    window.addEventListener('load', initGallery);
-    setTimeout(initGallery, 500);
-})();
+});
