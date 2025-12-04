@@ -390,41 +390,44 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Gallery Filter Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    function filterGallery(category) {
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        const galleryTabs = document.querySelectorAll('.gallery-tab');
-        
-        // Update active tab
-        galleryTabs.forEach(tab => {
-            if (tab.getAttribute('data-category') === category) {
-                tab.classList.add('active');
-            } else {
-                tab.classList.remove('active');
-            }
-        });
-        
-        // Filter items
-        galleryItems.forEach(item => {
-            const itemCategory = item.getAttribute('data-category');
-            if (category === 'all' || itemCategory === category) {
-                item.classList.remove('hidden');
-                item.style.display = '';
-            } else {
-                item.classList.add('hidden');
-                item.style.display = 'none';
-            }
-        });
-    }
-    
-    // Initialize gallery filter
+// Gallery Filter Functionality - Using Event Delegation
+(function() {
     function initGalleryFilter() {
-        const galleryTabs = document.querySelectorAll('.gallery-tab');
-        
-        if (galleryTabs.length === 0) {
+        const galleryTabsContainer = document.querySelector('.gallery-tabs');
+        if (!galleryTabsContainer) {
+            setTimeout(initGalleryFilter, 100);
             return;
         }
+        
+        // Use event delegation on the container
+        galleryTabsContainer.addEventListener('click', function(e) {
+            const clickedTab = e.target.closest('.gallery-tab');
+            if (!clickedTab) return;
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const category = clickedTab.getAttribute('data-category');
+            console.log('Gallery filter clicked:', category);
+            
+            // Update active tab
+            const allTabs = document.querySelectorAll('.gallery-tab');
+            allTabs.forEach(tab => tab.classList.remove('active'));
+            clickedTab.classList.add('active');
+            
+            // Filter gallery items
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (category === 'all' || itemCategory === category) {
+                    item.classList.remove('hidden');
+                    item.style.display = '';
+                } else {
+                    item.classList.add('hidden');
+                    item.style.display = 'none';
+                }
+            });
+        });
         
         // Ensure all items are visible initially
         const galleryItems = document.querySelectorAll('.gallery-item');
@@ -432,49 +435,14 @@ document.addEventListener('DOMContentLoaded', function() {
             item.classList.remove('hidden');
             item.style.display = '';
         });
-        
-        // Add click handlers
-        galleryTabs.forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const category = this.getAttribute('data-category');
-                filterGallery(category);
-            });
-        });
     }
     
-    // Initialize
-    initGalleryFilter();
-    
-    // Also try after a short delay
-    setTimeout(initGalleryFilter, 100);
-});
-
-// Also initialize on window load
-window.addEventListener('load', function() {
-    const galleryTabs = document.querySelectorAll('.gallery-tab');
-    if (galleryTabs.length > 0) {
-        galleryTabs.forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const category = this.getAttribute('data-category');
-                const galleryItems = document.querySelectorAll('.gallery-item');
-                const allTabs = document.querySelectorAll('.gallery-tab');
-                
-                allTabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                galleryItems.forEach(item => {
-                    const itemCategory = item.getAttribute('data-category');
-                    if (category === 'all' || itemCategory === category) {
-                        item.classList.remove('hidden');
-                        item.style.display = '';
-                    } else {
-                        item.classList.add('hidden');
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
+    // Initialize on multiple events
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGalleryFilter);
+    } else {
+        initGalleryFilter();
     }
-});
+    window.addEventListener('load', initGalleryFilter);
+    setTimeout(initGalleryFilter, 200);
+})();

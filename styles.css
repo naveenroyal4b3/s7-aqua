@@ -1053,6 +1053,8 @@ section {
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 3rem;
+    position: relative;
+    z-index: 100;
 }
 
 .gallery-tab {
