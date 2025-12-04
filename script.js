@@ -391,34 +391,57 @@ window.addEventListener('scroll', () => {
 });
 
 // Gallery Filter Functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const galleryTabs = document.querySelectorAll('.gallery-tab');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    
-    if (galleryTabs.length > 0 && galleryItems.length > 0) {
-        galleryTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                galleryTabs.forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
-                this.classList.add('active');
-                
-                const category = this.getAttribute('data-category');
-                
-                // Filter gallery items
-                galleryItems.forEach(item => {
-                    if (category === 'all') {
-                        item.classList.remove('hidden');
-                    } else {
-                        const itemCategory = item.getAttribute('data-category');
-                        if (itemCategory === category) {
+(function() {
+    function initGallery() {
+        const galleryTabs = document.querySelectorAll('.gallery-tab');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        console.log('Gallery tabs found:', galleryTabs.length);
+        console.log('Gallery items found:', galleryItems.length);
+        
+        if (galleryTabs.length > 0 && galleryItems.length > 0) {
+            // Ensure all items are visible initially
+            galleryItems.forEach(item => {
+                item.classList.remove('hidden');
+                item.style.display = 'block';
+            });
+            
+            galleryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    galleryTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    console.log('Filtering by category:', category);
+                    
+                    // Filter gallery items
+                    galleryItems.forEach(item => {
+                        if (category === 'all') {
                             item.classList.remove('hidden');
+                            item.style.display = 'block';
                         } else {
-                            item.classList.add('hidden');
+                            const itemCategory = item.getAttribute('data-category');
+                            if (itemCategory === category) {
+                                item.classList.remove('hidden');
+                                item.style.display = 'block';
+                            } else {
+                                item.classList.add('hidden');
+                                item.style.display = 'none';
+                            }
                         }
-                    }
+                    });
                 });
             });
-        });
+        }
     }
-});
+    
+    // Initialize on multiple events
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGallery);
+    } else {
+        initGallery();
+    }
+    window.addEventListener('load', initGallery);
+})();

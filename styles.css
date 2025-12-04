@@ -1104,6 +1104,10 @@ section {
     aspect-ratio: 4/3;
     cursor: pointer;
     transition: var(--transition);
+    background: var(--light-color);
+    min-height: 300px;
+    display: block;
+    width: 100%;
 }
 
 .gallery-image:hover {
