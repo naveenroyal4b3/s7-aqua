@@ -252,12 +252,12 @@
                 <h2 class="section-title">Our Products Gallery</h2>
                 <p class="section-subtitle">Explore our wide range of water purification solutions</p>
             </div>
-            <div class="gallery-tabs">
-                <button class="gallery-tab active" data-category="all" onclick="filterGallery('all', this)">All Products</button>
-                <button class="gallery-tab" data-category="ro-domestic" onclick="filterGallery('ro-domestic', this)">Domestic RO</button>
-                <button class="gallery-tab" data-category="ro-commercial" onclick="filterGallery('ro-commercial', this)">Commercial RO</button>
-                <button class="gallery-tab" data-category="ro-industrial" onclick="filterGallery('ro-industrial', this)">Industrial RO</button>
-                <button class="gallery-tab" data-category="softeners" onclick="filterGallery('softeners', this)">Water Softeners</button>
+            <div class="gallery-tabs" id="gallery-tabs">
+                <button type="button" class="gallery-tab active" data-category="all" onclick="filterGallery('all', this); return false;">All Products</button>
+                <button type="button" class="gallery-tab" data-category="ro-domestic" onclick="filterGallery('ro-domestic', this); return false;">Domestic RO</button>
+                <button type="button" class="gallery-tab" data-category="ro-commercial" onclick="filterGallery('ro-commercial', this); return false;">Commercial RO</button>
+                <button type="button" class="gallery-tab" data-category="ro-industrial" onclick="filterGallery('ro-industrial', this); return false;">Industrial RO</button>
+                <button type="button" class="gallery-tab" data-category="softeners" onclick="filterGallery('softeners', this); return false;">Water Softeners</button>
             </div>
             <div class="gallery-grid">
                 <!-- Domestic RO Systems -->
@@ -1482,33 +1482,42 @@
     <script>
         // Gallery Filter Function - Inline to ensure it's always available
         function filterGallery(category, clickedButton) {
-            console.log('filterGallery called with category:', category);
-            
-            // Update active tab
-            const allTabs = document.querySelectorAll('.gallery-tab');
-            allTabs.forEach(tab => tab.classList.remove('active'));
-            if (clickedButton) {
-                clickedButton.classList.add('active');
-            }
-            
-            // Filter gallery items
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            console.log('Found gallery items:', galleryItems.length);
-            
-            galleryItems.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                if (category === 'all' || itemCategory === category) {
-                    item.classList.remove('hidden');
-                    item.style.display = '';
-                } else {
-                    item.classList.add('hidden');
-                    item.style.display = 'none';
+            try {
+                console.log('filterGallery called with category:', category);
+                alert('Filter clicked: ' + category); // Temporary debug
+                
+                // Update active tab
+                const allTabs = document.querySelectorAll('.gallery-tab');
+                allTabs.forEach(tab => tab.classList.remove('active'));
+                if (clickedButton) {
+                    clickedButton.classList.add('active');
                 }
-            });
+                
+                // Filter gallery items
+                const galleryItems = document.querySelectorAll('.gallery-item');
+                console.log('Found gallery items:', galleryItems.length);
+                
+                galleryItems.forEach(item => {
+                    const itemCategory = item.getAttribute('data-category');
+                    if (category === 'all' || itemCategory === category) {
+                        item.classList.remove('hidden');
+                        item.style.display = '';
+                    } else {
+                        item.classList.add('hidden');
+                        item.style.display = 'none';
+                    }
+                });
+            } catch(e) {
+                console.error('Error in filterGallery:', e);
+                alert('Error: ' + e.message);
+            }
         }
         
         // Make sure function is available on window
         window.filterGallery = filterGallery;
+        
+        // Test if function is available
+        console.log('filterGallery function available:', typeof filterGallery);
     </script>
     <script src="script.js?v=8"></script>
     <!-- Inline scripts for Statistics and FAQ to ensure they work -->
