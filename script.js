@@ -94,6 +94,7 @@ if (contactForm) {
         // Get service display name
         const serviceOptions = {
             'ro-purifier': 'RO Water Purifier',
+            'water-softener': 'Water Softener',
             'water-plant': 'Water Treatment Plant',
             'installation': 'Installation',
             'maintenance': 'Maintenance & Repair',
