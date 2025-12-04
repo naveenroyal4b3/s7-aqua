@@ -61,9 +61,14 @@ body {
 }
 
 .logo-svg {
-    height: 50px;
+    height: 60px;
     width: auto;
-    max-width: 300px;
+    max-width: 320px;
+    transition: var(--transition);
+}
+
+.logo-svg:hover {
+    transform: scale(1.02);
 }
 
 .logo h1 {
