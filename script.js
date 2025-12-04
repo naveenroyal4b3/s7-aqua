@@ -392,55 +392,52 @@ window.addEventListener('scroll', () => {
 
 // Gallery Filter Functionality
 (function() {
-    let galleryInitialized = false;
-    
     function initGallery() {
-        if (galleryInitialized) return;
-        
         const galleryTabs = document.querySelectorAll('.gallery-tab');
         const galleryItems = document.querySelectorAll('.gallery-item');
         
-        console.log('Gallery tabs found:', galleryTabs.length);
-        console.log('Gallery items found:', galleryItems.length);
+        if (galleryTabs.length === 0 || galleryItems.length === 0) {
+            return;
+        }
         
-        if (galleryTabs.length > 0 && galleryItems.length > 0) {
-            galleryInitialized = true;
+        // Ensure all items are visible initially
+        galleryItems.forEach(item => {
+            item.classList.remove('hidden');
+            item.style.display = '';
+        });
+        
+        // Add click handlers to tabs
+        galleryTabs.forEach(tab => {
+            // Remove any existing listeners by cloning
+            const newTab = tab.cloneNode(true);
+            tab.parentNode.replaceChild(newTab, tab);
             
-            // Ensure all items are visible initially
-            galleryItems.forEach(item => {
-                item.classList.remove('hidden');
-            });
-            
-            // Add click handlers to tabs
-            galleryTabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Remove active class from all tabs
-                    galleryTabs.forEach(t => t.classList.remove('active'));
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    const category = this.getAttribute('data-category');
-                    console.log('Filtering by category:', category);
-                    
-                    // Filter gallery items
-                    galleryItems.forEach(item => {
-                        if (category === 'all') {
+            newTab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                
+                // Filter gallery items
+                document.querySelectorAll('.gallery-item').forEach(item => {
+                    if (category === 'all') {
+                        item.classList.remove('hidden');
+                        item.style.display = '';
+                    } else {
+                        const itemCategory = item.getAttribute('data-category');
+                        if (itemCategory === category) {
                             item.classList.remove('hidden');
+                            item.style.display = '';
                         } else {
-                            const itemCategory = item.getAttribute('data-category');
-                            if (itemCategory === category) {
-                                item.classList.remove('hidden');
-                            } else {
-                                item.classList.add('hidden');
-                            }
+                            item.classList.add('hidden');
+                            item.style.display = 'none';
                         }
-                    });
+                    }
                 });
             });
-        }
+        });
     }
     
     // Initialize on multiple events
@@ -450,4 +447,5 @@ window.addEventListener('scroll', () => {
         initGallery();
     }
     window.addEventListener('load', initGallery);
+    setTimeout(initGallery, 500);
 })();
