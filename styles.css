@@ -1118,6 +1118,12 @@ section {
     transition: var(--transition);
     display: block;
     background: var(--light-color);
+    min-height: 200px;
+}
+
+.gallery-image {
+    background: var(--light-color);
+    min-height: 300px;
 }
 
 .gallery-image:hover img {
