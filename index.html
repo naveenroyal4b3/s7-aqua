@@ -1478,7 +1478,39 @@
         </svg>
     </a>
 
-    <script src="script.js?v=7"></script>
+    <!-- Gallery Filter Function - Inline to ensure it's always available -->
+    <script>
+        // Gallery Filter Function - Inline to ensure it's always available
+        function filterGallery(category, clickedButton) {
+            console.log('filterGallery called with category:', category);
+            
+            // Update active tab
+            const allTabs = document.querySelectorAll('.gallery-tab');
+            allTabs.forEach(tab => tab.classList.remove('active'));
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+            
+            // Filter gallery items
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            console.log('Found gallery items:', galleryItems.length);
+            
+            galleryItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (category === 'all' || itemCategory === category) {
+                    item.classList.remove('hidden');
+                    item.style.display = '';
+                } else {
+                    item.classList.add('hidden');
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Make sure function is available on window
+        window.filterGallery = filterGallery;
+    </script>
+    <script src="script.js?v=8"></script>
     <!-- Inline scripts for Statistics and FAQ to ensure they work -->
     <script>
         // Statistics Counter - Inline version
