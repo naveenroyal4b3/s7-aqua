@@ -1482,42 +1482,32 @@
     <script>
         // Gallery Filter Function - Inline to ensure it's always available
         function filterGallery(category, clickedButton) {
-            try {
-                console.log('filterGallery called with category:', category);
-                alert('Filter clicked: ' + category); // Temporary debug
-                
-                // Update active tab
-                const allTabs = document.querySelectorAll('.gallery-tab');
-                allTabs.forEach(tab => tab.classList.remove('active'));
-                if (clickedButton) {
-                    clickedButton.classList.add('active');
-                }
-                
-                // Filter gallery items
-                const galleryItems = document.querySelectorAll('.gallery-item');
-                console.log('Found gallery items:', galleryItems.length);
-                
-                galleryItems.forEach(item => {
-                    const itemCategory = item.getAttribute('data-category');
-                    if (category === 'all' || itemCategory === category) {
-                        item.classList.remove('hidden');
-                        item.style.display = '';
-                    } else {
-                        item.classList.add('hidden');
-                        item.style.display = 'none';
-                    }
-                });
-            } catch(e) {
-                console.error('Error in filterGallery:', e);
-                alert('Error: ' + e.message);
+            // Update active tab
+            const allTabs = document.querySelectorAll('.gallery-tab');
+            allTabs.forEach(tab => tab.classList.remove('active'));
+            if (clickedButton) {
+                clickedButton.classList.add('active');
             }
+            
+            // Filter gallery items
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            galleryItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (category === 'all' || itemCategory === category) {
+                    item.classList.remove('hidden');
+                    item.style.display = '';
+                    item.style.visibility = 'visible';
+                    item.style.opacity = '1';
+                } else {
+                    item.classList.add('hidden');
+                    item.style.display = 'none';
+                }
+            });
         }
         
         // Make sure function is available on window
         window.filterGallery = filterGallery;
-        
-        // Test if function is available
-        console.log('filterGallery function available:', typeof filterGallery);
     </script>
     <script src="script.js?v=8"></script>
     <!-- Inline scripts for Statistics and FAQ to ensure they work -->

@@ -1101,7 +1101,8 @@ section {
 }
 
 .gallery-item.hidden {
-    display: none;
+    display: none !important;
+    visibility: hidden !important;
 }
 
 .gallery-image {
